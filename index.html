@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>GMAPZ App</title>
+        <link rel="stylesheet" href="output.css" />
+
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key=API_KEY_TEMEN_TEMEN_HEHEHHE&callback=initMap"
+            async
+            defer
+        ></script>
+    </head>
+    <body class="bg-slate-900 min-h-screen">
+        <main class="p-12 gap-x-5 flex justify-center items-center">
+            <div
+                class="text-base-200 pt-2 pb-5 px-10 rounded-2xl flex flex-col gap-y-3"
+            >
+                <select
+                    class="select select-primary text-black bg-gray-200 w-full max-w-xs"
+                    id="start"
+                    onchange="calcRoute()"
+                >
+                    <option disabled selected>Lokasi Awal</option>
+                    <option value="0.4763229680103482, 101.38073611747188">
+                        Riau University
+                    </option>
+                    <option value="0.627295876449859, 101.39680140597777">
+                        Rumah Willy
+                    </option>
+                    <option value="0.4835838834237214, 101.36403292713979">
+                        RS Daerah Madani
+                    </option>
+                    <option value="0.4837990261878268, 101.41982005866956">
+                        Optik Citra
+                    </option>
+                </select>
+
+                <select
+                    class="select select-primary text-black bg-gray-200 w-full max-w-xs"
+                    id="end"
+                    onchange="calcRoute()"
+                >
+                    <option disabled selected>Lokasi Tujuan</option>
+                    <option value="0.4763229680103482, 101.38073611747188">
+                        Riau University
+                    </option>
+                    <option value="0.6088902192012846, 101.43124756903319">
+                        Asia Heritage
+                    </option>
+                    <option value="0.4835838834237214, 101.36403292713979">
+                        RS Daerah Madani
+                    </option>
+                    <option value="0.4837990261878268, 101.41982005866956">
+                        Optik Citra
+                    </option>
+                    <option value="0.4646437064175908, 101.38541771164503">
+                        Aulia Hospital
+                    </option>
+                </select>
+
+                <select
+                    class="select select-primary text-black bg-gray-200 w-full max-w-xs"
+                    id="mode"
+                    onchange="calcRoute()"
+                >
+                    <option disabled selected value="DRIVING">Mode</option>
+                    <option value="DRIVING">Driving</option>
+                    <option value="WALKING">Walking</option>
+                    <option value="BICYCLING">Bicycling</option>
+                    <option value="TRANSIT">Transit</option>
+                </select>
+            </div>
+
+            <div
+                class="bg-black h-[700px] w-[1300px] text-base-200 p-10 rounded-2xl"
+                id="show-map"
+            ></div>
+        </main>
+        <script>
+            var directionsService = new google.maps.DirectionsService();
+            var directionsRenderer = new google.maps.DirectionsRenderer();
+
+            function initMap() {
+                directionsService = new google.maps.DirectionsService();
+                directionsRenderer = new google.maps.DirectionsRenderer();
+                const pekanbaru = new google.maps.LatLng(
+                    0.47161388368752655,
+                    101.37849532564007
+                );
+                var mapOptions = {
+                    zoom: 15,
+                    center: pekanbaru,
+                    mapTypeControlOptions: {
+                        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                        position: google.maps.ControlPosition.TOP_CENTER,
+                    },
+                    zoomControl: true,
+                    zoomControlOptions: {
+                        position: google.maps.ControlPosition.LEFT_CENTER,
+                    },
+                    scaleControl: true,
+                    streetViewControl: true,
+                    streetViewControlOptions: {
+                        position: google.maps.ControlPosition.LEFT_TOP,
+                    },
+                    fullscreenControl: true,
+                };
+                var map = new google.maps.Map(
+                    document.getElementById('show-map'),
+                    mapOptions
+                );
+                directionsRenderer.setMap(map);
+            }
+
+            function calcRoute() {
+                const mode = document.getElementById('mode').value;
+                var request = {
+                    origin: document.getElementById('start').value,
+                    destination: document.getElementById('end').value,
+                    travelMode: mode ? mode : 'DRIVING',
+                };
+                directionsService.route(request, function (result, status) {
+                    if (status == 'OK') {
+                        directionsRenderer.setDirections(result);
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>
